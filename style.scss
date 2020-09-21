@@ -1,0 +1,39 @@
+html {
+  background: linen;
+}
+
+#grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+}
+
+.grid-item {
+  position: relative;
+  display: flex;
+}
+
+.grid-image {
+  max-width: 100%;
+  opacity: 0;
+  transition-duration: 500ms;
+  z-index: 100;
+}
+
+.grid-spine-item {
+  font-family: 'DM Serif Display', serif;
+  min-width: 100%;
+  min-height: 100%;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4em;
+  border: 1px dashed #201e1b;
+  background-size: contain;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+

@@ -72,14 +72,14 @@ function promptNotes (filmnumber) {
   updateUserData(filmnumber, 'notes', notes)
 }
 
-function getFilmOject (id) {
+function getFilmObject (id) {
   const film = userData.films.filter(
-    film => film.spine_id === id
+    film => film.spine_id == id
   )[0]
   return film || false
 }
 
-function getFilmOjectFromSource (id) {
+function getFilmTitle (id) {
   const film = filmObjectArray.filter(
     film => +film.spine == id
   )[0]
@@ -87,7 +87,7 @@ function getFilmOjectFromSource (id) {
 }
 
 function updateUserData (id, key, value) {
-  const film = getFilmOject(id)
+  const film = getFilmObject(id, userData.films)
   if (!film) {
     const filmObject = {
       spine_id: id
@@ -104,46 +104,36 @@ function writeDatatoLocalStorage (data) {
   localStorage.setItem('userData', JSONData)
 }
 
-
 let mouseIsDown = false
 let offset = [0, 0]
-const notesWindow = document.querySelector('.window')
-
-/*
-notesWindow.addEventListener('mousedown', function (event) {
-  offset = [
-    notesWindow.offsetLeft - event.clientX,
-    notesWindow.offsetTop - event.clientY
-  ]
-  mouseIsDown = true
-})
-*/
-
-
-
-
+//const notesWindow = document.querySelector('.window')
 
 
 
 function loadNotesWindow () {
   event.stopPropagation()
   const spine = this.parentNode.children[1].innerText
-  const currentFilmNotes = getFilmOject(spine)
+  const currentFilmNotes = getFilmObject(spine, userData.films)
   
   
   const notesWindow = document.createElement('div')
   notesWindow.className = 'window'
   document.body.appendChild(notesWindow)
 
-  const filmTitle = document.createElement('h1')
-  notesWindow.appendChild(filmTitle)
-  filmTitle.innerText = getFilmOjectFromSource(spine)
+  const header = document.createElement('div')
+  notesWindow.appendChild(header)
+  header.className = 'header'
 
+  const filmTitle = document.createElement('h1')
+  header.appendChild(filmTitle)
+  filmTitle.innerText = getFilmTitle(spine)
+
+  
 
   const closeIcon = document.createElement('i')
   closeIcon.innerHTML = 'x'
   closeIcon.addEventListener('click', destroy)
-  notesWindow.appendChild(closeIcon)
+  header.appendChild(closeIcon)
   
   const saveButton = document.createElement('button')
   
@@ -194,40 +184,45 @@ function loadNotesWindow () {
 }
 
 
+const searchBar = document.querySelector('#searchbar')
+
+searchBar.addEventListener('change', updateSearch)
 
 
-/*
-***********************************************
-DELETED CODE -- USED WHEN I USED COOKIES
-***********************************************
+function updateSearch (e) {
+  const input = e.target.value
+  e.target.blur()
+  e.target.addEventListener('click', search(input))
+}
 
-let seenArray = []
+async function search (title) {
+  const filmNumber = filmObjectArray.filter(
+    film => film.title.toLowerCase().includes(title)
+  ).map(film => film.spine)[0]
 
-function searchCookiesAndUpdateSeenList () {
-  let array = document.cookie.split(';')
-    .filter(item => item.includes('film'))
-  if (!(array[0])) {
-    seenArray = []
-  } else {
-    array = array[0].split('=')[1]
-    seenArray = JSON.parse(array)
+  for (const a of document.querySelectorAll(".grid-spine-item")) {
+    if (a.innerText == filmNumber) {
+    
+      await scrollToTargetAdjusted(a)
+      a.classList.add('pulse')
+      setTimeout(async function(){ 
+        await a.classList.remove('pulse')
+        //a.style.border = '1px solid #201e1b'
+      }, 2600)
+      
+    }
   }
+
+  
+
+  //console.log(filmNumber || false)
 }
 
-function removeFilmFromArray (array, filmnumber) {
-  seenArray = array.filter(item => item !== filmnumber)
+async function scrollToTargetAdjusted(element) {
+  const headerOffset = 50
+  const elementPosition = await element.getBoundingClientRect().top
+  const offsetPosition = elementPosition - headerOffset + pageYOffset
+  window.scrollTo({
+    top: offsetPosition
+  })
 }
-
-function addFilmToArray (array, filmnumber) {
-  array.push(filmnumber)
-}
-
-function updateCookie (array) {
-  const cookie = JSON.stringify(array)
-  document.cookie = `films=${cookie}`
-}
-
-***********************************************
-END OF DELETED CODE -- USED WHEN I USED COOKIES
-***********************************************
-*/

@@ -1,3 +1,12 @@
+const isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
+               navigator.userAgent &&
+               navigator.userAgent.indexOf('CriOS') == -1 &&
+               navigator.userAgent.indexOf('FxiOS') == -1;
+
+if (!isSafari) {
+  document.documentElement.style.scrollBehavior = 'smooth'
+}
+
 const grid = document.getElementById('grid')
 let userData
 
@@ -39,6 +48,7 @@ function initGridFromUserData (gridElement) {
 
     spineDiv.innerHTML = spine
     spineDiv.classList = 'grid-spine-item'
+    if (isSafari) spineDiv.style.display = 'block'
 
     const editIcon = document.createElement('button')
     gridItem.appendChild(editIcon)
@@ -204,9 +214,14 @@ async function search (title) {
     if (a.innerText == filmNumber) {
     
       await scrollToTargetAdjusted(a)
-      a.classList.add('pulse')
+      if (isSafari) {
+        a.classList.add('pulse-safari')
+      } else {
+        a.classList.add('pulse')
+      }
       setTimeout(async function(){ 
         await a.classList.remove('pulse')
+        await a.classList.remove('pulse-safari')
         //a.style.border = '1px solid #201e1b'
       }, 2600)
       

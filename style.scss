@@ -4,7 +4,7 @@ html {
 
 #grid {
   display: grid;
-  margin-top: 50px;
+  margin-top: 100px;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
 }
 
@@ -23,7 +23,6 @@ html {
 }
 
 .grid-spine-item {
-  font-family: 'DM Serif Display', serif;
   min-width: 100%;
   min-height: 100%;
   position: absolute;
@@ -41,7 +40,7 @@ html {
 }
 
 button {
-  
+  font-family: 'VCR';
   position: absolute;
   z-index: 200;
   font-size: 2em;
@@ -80,10 +79,12 @@ button {
 
 
 .window {
+  cursor: move;
   padding: 0 20px;
   z-index: 5000;
   background-color: linen;
-  height: 300px;
+  height: 350px;
+  background: #FF6464;
   width: 400px;
   position: fixed;
   top: 5vh;
@@ -98,6 +99,7 @@ button {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin: 10px 0px;
   }
 
   h1 {
@@ -107,6 +109,8 @@ button {
   
   textarea {
     resize: none;
+    font-family: 'VCR';
+    font-size: 1rem;
     background-color: linen;
     margin: auto;
     height: 80%;
@@ -116,16 +120,15 @@ button {
 
   i {
     cursor: pointer;
+    //color: #FF6464;
     font-size: 2em;
     align-self: flex-end;
   }
 
   #save {
-    font-family: 'DM Serif Display', serif;
-
+    margin: 10px 0px;
     position: static;
     animation: none;
-
     color: black;
     align-self: flex-start;
     font-size: 1em;
@@ -139,11 +142,12 @@ header {
   z-index: 1000;
   top: 0;
   width: 100%;
-  height: 50px;
+  height: 100px;
   display: flex;
   justify-content: center;
   background: linen;
   #searchbar {
+    font-family: 'VCR';
     background-color: linen;
     border: none;
     &:focus {

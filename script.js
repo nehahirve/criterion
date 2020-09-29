@@ -53,6 +53,8 @@ function initGridFromUserData (gridElement) {
     const editIcon = document.createElement('button')
     gridItem.appendChild(editIcon)
     editIcon.innerText = '+'
+    editIcon.style.color = '#FF6464'
+    editIcon.style.opacity = 0
     editIcon.addEventListener('click', loadNotesWindow)
 
     spineDiv.style.backgroundImage = `url(${imageUrl})`
@@ -65,13 +67,17 @@ console.log(userData)
 
 function clickHandler () {
   const imageDiv = this.children[0]
+  const editIcon = this.children[2]
   const clickedFilmNumber = this.children[1].innerText
   if (imageDiv.style.opacity === '1') {
     imageDiv.style.opacity = '0'
+    editIcon.style.opacity = '0'
+    
     updateUserData(clickedFilmNumber, 'seen', false)
     writeDatatoLocalStorage(userData)
   } else {
     imageDiv.style.opacity = '1'
+    editIcon.style.opacity = '1'
     updateUserData(clickedFilmNumber, 'seen', true)
     writeDatatoLocalStorage(userData)
   }
@@ -234,7 +240,7 @@ async function search (title) {
 }
 
 async function scrollToTargetAdjusted(element) {
-  const headerOffset = 50
+  const headerOffset = 100
   const elementPosition = await element.getBoundingClientRect().top
   const offsetPosition = elementPosition - headerOffset + pageYOffset
   window.scrollTo({

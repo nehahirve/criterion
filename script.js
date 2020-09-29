@@ -35,13 +35,6 @@ function initGridFromUserData (gridElement) {
     image.src = imageUrl
     image.classList = 'grid-image'
 
-    if (userData.films.length > 0) {
-      for (const film of userData.films) {
-        if (spine === +film.spine_id && film.seen) {
-          image.style.opacity = '1'
-        }
-      }
-    }
 
     const spineDiv = document.createElement('div')
     gridItem.appendChild(spineDiv)
@@ -53,9 +46,17 @@ function initGridFromUserData (gridElement) {
     const editIcon = document.createElement('button')
     gridItem.appendChild(editIcon)
     editIcon.innerText = '+'
-    editIcon.style.color = '#FF6464'
     editIcon.style.opacity = 0
     editIcon.addEventListener('click', loadNotesWindow)
+
+    if (userData.films.length > 0) {
+      for (const film of userData.films) {
+        if (spine === +film.spine_id && film.seen) {
+          image.style.opacity = '1'
+          editIcon.style.opacity = '1'
+        }
+      }
+    }
 
     spineDiv.style.backgroundImage = `url(${imageUrl})`
     gridItem.addEventListener('click', clickHandler)
@@ -173,7 +174,7 @@ function loadNotesWindow (e) {
 
   function updateNotes (e) {
     const input = e.target.value
-    saveButton.addEventListener('click', saveNotes(input, spine))
+    saveButton.addEventListener('click', saveNotes.bind(e, input, spine))
   }
 
   function saveNotes (value, id) {
@@ -183,6 +184,7 @@ function loadNotesWindow (e) {
   }
 
   function destroy () {
+    console.log('save')
     document.body.removeChild(notesWindow)
   }
 }

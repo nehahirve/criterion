@@ -47,7 +47,7 @@ async function writeFilmObjectArray (array) {
   try {
     for (const url of array) {
       await scrapeFilm(url, page)
-    } 
+    }
   } catch (error) {
     console.log(error)
   } finally {

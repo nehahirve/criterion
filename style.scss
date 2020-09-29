@@ -40,11 +40,11 @@ html {
 }
 
 button {
+  color: #FF6464;
   font-family: 'VCR';
   position: absolute;
   z-index: 200;
   font-size: 2em;
-  color: linen;
   top: 8px;
   right: 10px;
   background: none;
@@ -120,7 +120,7 @@ button {
 
   i {
     cursor: pointer;
-    //color: #FF6464;
+    //color: black;
     font-size: 2em;
     align-self: flex-end;
   }

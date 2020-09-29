@@ -1,7 +1,7 @@
 const isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
                navigator.userAgent &&
-               navigator.userAgent.indexOf('CriOS') == -1 &&
-               navigator.userAgent.indexOf('FxiOS') == -1;
+               navigator.userAgent.indexOf('CriOS') === -1 &&
+               navigator.userAgent.indexOf('FxiOS') === -1
 
 if (!isSafari) {
   document.documentElement.style.scrollBehavior = 'smooth'
@@ -72,7 +72,7 @@ function clickHandler () {
   if (imageDiv.style.opacity === '1') {
     imageDiv.style.opacity = '0'
     editIcon.style.opacity = '0'
-    
+
     updateUserData(clickedFilmNumber, 'seen', false)
     writeDatatoLocalStorage(userData)
   } else {
@@ -81,11 +81,6 @@ function clickHandler () {
     updateUserData(clickedFilmNumber, 'seen', true)
     writeDatatoLocalStorage(userData)
   }
-}
-
-function promptNotes (filmnumber) {
-  const notes = prompt('notes')
-  updateUserData(filmnumber, 'notes', notes)
 }
 
 function getFilmObject (id) {
@@ -122,16 +117,12 @@ function writeDatatoLocalStorage (data) {
 
 let mouseIsDown = false
 let offset = [0, 0]
-//const notesWindow = document.querySelector('.window')
 
-
-
-function loadNotesWindow () {
-  event.stopPropagation()
+function loadNotesWindow (e) {
+  e.stopPropagation()
   const spine = this.parentNode.children[1].innerText
   const currentFilmNotes = getFilmObject(spine, userData.films)
-  
-  
+
   const notesWindow = document.createElement('div')
   notesWindow.className = 'window'
   document.body.appendChild(notesWindow)
@@ -144,15 +135,13 @@ function loadNotesWindow () {
   header.appendChild(filmTitle)
   filmTitle.innerText = getFilmTitle(spine)
 
-  
-
   const closeIcon = document.createElement('i')
   closeIcon.innerHTML = 'x'
   closeIcon.addEventListener('click', destroy)
   header.appendChild(closeIcon)
-  
+
   const saveButton = document.createElement('button')
-  
+
   saveButton.setAttribute('id', 'save')
   saveButton.innerHTML = 'SAVE'
 
@@ -161,7 +150,7 @@ function loadNotesWindow () {
   notesWindow.appendChild(input)
   notesWindow.appendChild(saveButton)
   input.addEventListener('change', updateNotes)
-  
+
   notesWindow.addEventListener('mousedown', function (event) {
     offset = [
       notesWindow.offsetLeft - event.clientX,
@@ -196,14 +185,11 @@ function loadNotesWindow () {
   function destroy () {
     document.body.removeChild(notesWindow)
   }
-
 }
-
 
 const searchBar = document.querySelector('#searchbar')
 
 searchBar.addEventListener('change', updateSearch)
-
 
 function updateSearch (e) {
   const input = e.target.value
@@ -216,33 +202,26 @@ async function search (title) {
     film => film.title.toLowerCase().includes(title)
   ).map(film => film.spine)[0]
 
-  for (const a of document.querySelectorAll(".grid-spine-item")) {
+  for (const a of document.querySelectorAll('.grid-spine-item')) {
     if (a.innerText == filmNumber) {
-    
       await scrollToTargetAdjusted(a)
       if (isSafari) {
         a.classList.add('pulse-safari')
       } else {
         a.classList.add('pulse')
       }
-      setTimeout(async function(){ 
-        await a.classList.remove('pulse')
-        await a.classList.remove('pulse-safari')
-        //a.style.border = '1px solid #201e1b'
+      setTimeout(async function () {
+        a.classList.remove('pulse')
+        a.classList.remove('pulse-safari')
       }, 2600)
-      
     }
   }
-
-  
-
-  //console.log(filmNumber || false)
 }
 
-async function scrollToTargetAdjusted(element) {
+async function scrollToTargetAdjusted (element) {
   const headerOffset = 100
   const elementPosition = await element.getBoundingClientRect().top
-  const offsetPosition = elementPosition - headerOffset + pageYOffset
+  const offsetPosition = elementPosition - headerOffset + window.pageYOffset
   window.scrollTo({
     top: offsetPosition
   })

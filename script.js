@@ -184,7 +184,6 @@ function loadNotesWindow (e) {
   }
 
   function destroy () {
-    console.log('save')
     document.body.removeChild(notesWindow)
   }
 }
